@@ -8,6 +8,7 @@ import tempfile
 from pathlib import Path
 
 from book_to_skill.config import OUTPUT_DIR
+from book_to_skill.exceptions import ExtractionError
 
 
 def extract_with_ebook_convert(input_path: str) -> str | None:
@@ -31,7 +32,7 @@ def extract_with_ebook_convert(input_path: str) -> str | None:
     try:
         tmp_ctx = tempfile.TemporaryDirectory(dir=OUTPUT_DIR, prefix="ebook-convert-")
     except OSError as e:
-        raise OSError(
+        raise ExtractionError(
             f"cannot create a conversion directory under {OUTPUT_DIR}: {e}"
         ) from e
 

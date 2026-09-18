@@ -26,6 +26,8 @@ import pytest
 ROOT_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT_DIR))
 
+from book_to_skill.exceptions import ExtractionError  # noqa: E402
+
 BOOK_A_TEXT = "TEXT OF BOOK A\n"
 
 
@@ -190,5 +192,5 @@ def test_unwritable_output_dir_raises(calibre_module):
     with mock.patch.object(calibre.shutil, "which", return_value="/usr/bin/ebook-convert"), \
          mock.patch.object(calibre.tempfile, "TemporaryDirectory") as tmp_dir:
         tmp_dir.side_effect = OSError(13, "Permission denied")
-        with pytest.raises(OSError, match="cannot create a conversion directory"):
+        with pytest.raises(ExtractionError, match="cannot create a conversion directory"):
             calibre.extract_with_ebook_convert("book.mobi")
